@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use odbc_api::{Environment, ConnectionOptions};
+use odbc_api::{ConnectionOptions, Environment};
 
 #[test]
 fn test_db_connection() -> Result<(), Box<dyn Error>> {
@@ -12,7 +12,5 @@ fn test_db_connection() -> Result<(), Box<dyn Error>> {
 }
 
 fn test_deadpool() -> Result<(), Box<dyn Error>> {
-
-
     Ok(())
 }

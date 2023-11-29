@@ -1,7 +1,6 @@
 use axum::Router;
 use tokio::net::TcpListener;
 
-mod model_mod;
 pub mod router_mod;
 
 pub async fn tcplistener_binder(addr: &str) -> TcpListener {
