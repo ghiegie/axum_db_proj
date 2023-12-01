@@ -1,10 +1,12 @@
+use axum::debug_handler;
 use axum::{extract::State, Json};
+use odbc_api::ConnectionOptions;
 use odbc_api::{
     buffers::{BufferDesc, ColumnarAnyBuffer},
-    Cursor,
+    Cursor, Environment,
 };
 use serde::{Deserialize, Serialize};
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 
 #[derive(Serialize, Deserialize)]
 pub struct GetResponse {
@@ -19,19 +21,21 @@ impl GetResponse {
     }
 }
 
-pub async fn get_customers(
-    State(conn): State<Arc<Mutex<odbc_api::Connection<'_>>>>,
-) -> Json<GetResponse> {
+#[debug_handler]
+pub async fn get_customers(State(conn): State<Arc<Environment>>) -> Json<GetResponse> {
     let batch_size = 1000;
     let buffer_description = [BufferDesc::Text { max_str_len: 255 }];
     let mut buffer = ColumnarAnyBuffer::from_descs(batch_size, buffer_description);
 
-    let mut response = Vec::new();
+    let conn = Arc::clone(&conn);
+    let con_str = "Driver={ODBC Driver 17 for SQL Server};Server=DESKTOP-DCDEB6P\\MSSQLSERVER01;Database=SampleDatabase;Trusted_Connection=yes;";
+    let conn = conn
+        .connect_with_connection_string(con_str, ConnectionOptions::default())
+        .unwrap();
 
     let query = "select Name from CustomerTbl";
+    let mut response = Vec::new();
     if let Some(cursor) = conn
-        .lock()
-        .expect("FAILED TO UNLOCK MUTEX")
         .execute(query, ())
         .expect("FAILED TO CREATE CURSOR FROM QUERY")
     {
