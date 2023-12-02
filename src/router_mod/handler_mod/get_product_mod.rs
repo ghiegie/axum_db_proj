@@ -26,7 +26,7 @@ pub async fn get_product(State(conn): State<Arc<Environment>>) -> Json<GetRespon
     let batch_size = 1000;
     let buffer_description = [BufferDesc::Text { max_str_len: 255 }];
     let mut buffer = ColumnarAnyBuffer::from_descs(batch_size, buffer_description);
-    
+
     let conn = Arc::clone(&conn);
     let con_str = "Driver={ODBC Driver 17 for SQL Server};Server=DESKTOP-DCDEB6P\\MSSQLSERVER01;Database=SampleDatabase;Trusted_Connection=yes;";
     let conn = conn
@@ -35,7 +35,10 @@ pub async fn get_product(State(conn): State<Arc<Environment>>) -> Json<GetRespon
 
     let query = "select Product from ProductTbl";
     let mut response = Vec::new();
-    if let Some(cursor) = conn.execute(&query, ()).expect("FAILED TO CREATE CURSOR FROM QUERY") {
+    if let Some(cursor) = conn
+        .execute(&query, ())
+        .expect("FAILED TO CREATE CURSOR FROM QUERY")
+    {
         let mut buffer_with_cursor = cursor.bind_buffer(&mut buffer).unwrap();
         while let Some(row_set) = buffer_with_cursor.fetch().expect("FAILED TO FETCH") {
             let col = row_set.column(0);
@@ -47,7 +50,7 @@ pub async fn get_product(State(conn): State<Arc<Environment>>) -> Json<GetRespon
                 }
             }
         }
-    }    
+    }
 
     Json(GetResponse::new(response))
 }

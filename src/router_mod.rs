@@ -4,12 +4,10 @@ use axum::{
     routing::{get, post},
     Router,
 };
-//use lazy_static::lazy_static;
 use odbc_api::{
     sys::{AttrConnectionPooling, AttrCpMatch},
-    Connection, ConnectionOptions, Environment,
+    Environment,
 };
-use std::sync::OnceLock;
 
 use crate::router_mod::handler_mod::{
     get_customer_mod::get_customers, post_sales_order_with_cust_mod::post_sales_order_with_customer,
