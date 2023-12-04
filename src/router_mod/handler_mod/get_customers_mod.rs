@@ -7,35 +7,38 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct GetPrd {
-    list: Vec<PrdData>,
+pub struct GetCust {
+    list: Vec<CustData>,
 }
 
-impl GetPrd {
-    pub fn new(list: Vec<PrdData>) -> Self {
+impl GetCust {
+    pub fn new(list: Vec<CustData>) -> Self {
         Self { list }
     }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct PrdData {
+pub struct CustData {
     id: i32,
     name: String,
 }
 
-impl PrdData {
+impl CustData {
     pub fn new(id: i32, name: String) -> Self {
         Self { id, name }
     }
 }
 
-pub async fn get_product(State((con_str, env)): State<(String, Arc<Environment>)>) -> Json<GetPrd> {
+pub async fn get_customer(
+    State((con_str, env)): State<(String, Arc<Environment>)>,
+) -> Json<GetCust> {
     let env = Arc::clone(&env);
+
     let conn = env
         .connect_with_connection_string(&con_str, ConnectionOptions::default())
         .expect("ERROR: FAILED TO ESTABLISH DB CONNECTION");
 
-    let sql_query = "select * from ProductTbl";
+    let sql_query = "select CustomerID, Name from CustomerTbl";
 
     let batch_size = 1000; // size of buffer
     let buffer_desc = [
@@ -75,11 +78,11 @@ pub async fn get_product(State((con_str, env)): State<(String, Arc<Environment>)
 
         let mut list = Vec::new();
         for (id, name) in id_arr.into_iter().zip(name_vec.into_iter()) {
-            list.push(PrdData::new(id, name))
+            list.push(CustData::new(id, name))
         }
 
-        return Json(GetPrd::new(list));
+        return Json(GetCust::new(list));
     }
 
-    Json(GetPrd::new(Vec::new()))
+    Json(GetCust::new(Vec::new()))
 }
