@@ -11,7 +11,7 @@ use odbc_api::{
 
 use self::handler_mod::{
     get_customers_mod::get_customer, get_product_mod::get_product,
-    post_with_old_cust_mod::post_with_old_cust, post_with_new_cust_mod::post_with_new_cust,
+    post_with_new_cust_mod::post_with_new_cust, post_with_old_cust_mod::post_with_old_cust, post_task_mod::post_task,
 };
 
 pub mod handler_mod;
@@ -25,6 +25,7 @@ pub fn create_router() -> Router {
         .route("/get_product", get(get_product))
         .route("/post_so_old_cust", post(post_with_old_cust))
         .route("/post_so_new_cust", post(post_with_new_cust))
+        .route("/post_task", post(post_task))
         .with_state((
             conn_str,
             Arc::new({
