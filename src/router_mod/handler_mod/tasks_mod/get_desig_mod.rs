@@ -30,6 +30,7 @@ impl GetDesig {
 }
 
 pub async fn get_desig(State((con_str, env)): State<(String, Arc<Environment>)>) -> Json<GetDesig> {
+    println!("EXECUTING: tasks/get_desig");
     let env = Arc::clone(&env);
     let conn = env
         .connect_with_connection_string(&con_str, ConnectionOptions::default())
