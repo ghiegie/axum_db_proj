@@ -10,8 +10,12 @@ use odbc_api::{
 };
 
 use self::handler_mod::{
-    get_customers_mod::get_customer, get_product_mod::get_product,
-    post_with_new_cust_mod::post_with_new_cust, post_with_old_cust_mod::post_with_old_cust, post_task_mod::post_task,
+    get_customers_mod::get_customer,
+    get_product_mod::get_product,
+    post_task_mod::post_task,
+    post_with_new_cust_mod::post_with_new_cust,
+    post_with_old_cust_mod::post_with_old_cust,
+    tasks_mod::{get_desig_mod::get_desig, get_workers_mod::get_workers},
 };
 
 pub mod handler_mod;
@@ -26,6 +30,7 @@ pub fn create_router() -> Router {
         .route("/post_so_old_cust", post(post_with_old_cust))
         .route("/post_so_new_cust", post(post_with_new_cust))
         .route("/post_task", post(post_task))
+        .nest("/tasks", task_transactions())
         .with_state((
             conn_str,
             Arc::new({
@@ -41,4 +46,10 @@ pub fn create_router() -> Router {
                 env
             }),
         ))
+}
+
+pub fn task_transactions() -> Router<(String, Arc<Environment>)> {
+    Router::new()
+        .route("/get_desig", get(get_desig))
+        .route("/get_workers", get(get_workers))
 }

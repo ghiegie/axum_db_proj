@@ -1,5 +1,5 @@
 use axum::{extract::State, Json};
-use odbc_api::{ConnectionOptions, Environment, IntoParameter, sys::Date};
+use odbc_api::{sys::Date, ConnectionOptions, Environment, IntoParameter};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use time::OffsetDateTime;
@@ -20,17 +20,17 @@ pub async fn post_task(
 
     let sql_query = "insert into SampleTaskTbl(Task, TaskDate) values(?, ?)";
 
-    let date = Date{
+    let date = Date {
         year: 2023,
         month: 12,
         day: 7,
     };
 
-    conn.execute(sql_query, (
-        &body.task.into_parameter(),
-        &date.into_parameter(),
-    ))
-        .expect("FAILED TO INSERT");
+    conn.execute(
+        sql_query,
+        (&body.task.into_parameter(), &date.into_parameter()),
+    )
+    .expect("FAILED TO INSERT");
 
     let now = OffsetDateTime::now_local();
 
