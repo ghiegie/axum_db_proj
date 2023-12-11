@@ -1,0 +1,16 @@
+DONE 1. gawa ng db for tasks PROTO
+DONE 2. gawa ng db for workers and designation PROTO
+DONE 3. gawa ng gui pang pasok ng tasks
+4. ayusin api para kapasok data from gui to db
+5. gawa ng gui pang show ng lahat ng tasks
+6. show lahat ng tasks sa calendar
+7. gawa ng gui pangshow ng lahat ng SO
+
+
+endpoints:
+DONE get designations for designation cb
+DONE get workers for workers cb
+DONE post the tasks
+
+db for tasks 
+taskID / @taskname / @taskstartdate / NULL@taskenddate / @taskstarttime / NULL@taskenddate / (when adding always naka start)status / CB@designationID / CB@workerID
