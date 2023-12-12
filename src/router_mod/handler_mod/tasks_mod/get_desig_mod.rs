@@ -1,4 +1,4 @@
-use axum::{extract::State, Json};
+use axum::{extract::State, Json, http::StatusCode};
 use odbc_api::{
     buffers::{BufferDesc, ColumnarAnyBuffer},
     ConnectionOptions, Cursor, Environment,
@@ -29,7 +29,7 @@ impl GetDesig {
     }
 }
 
-pub async fn get_desig(State((con_str, env)): State<(String, Arc<Environment>)>) -> Json<GetDesig> {
+pub async fn get_desig(State((con_str, env)): State<(String, Arc<Environment>)>) -> (StatusCode, Json<GetDesig>) {
     println!("EXECUTING: tasks/get_desig");
     let env = Arc::clone(&env);
     let conn = env
@@ -79,8 +79,8 @@ pub async fn get_desig(State((con_str, env)): State<(String, Arc<Environment>)>)
             list.push(DesigData::new(id, desig))
         }
 
-        return Json(GetDesig::new(list));
+        return (StatusCode::OK ,Json(GetDesig::new(list)));
     }
 
-    Json(GetDesig::new(Vec::new()))
+    (StatusCode::BAD_REQUEST ,Json(GetDesig::new(Vec::new())))
 }

@@ -1,10 +1,18 @@
 DONE 1. gawa ng db for tasks PROTO
 DONE 2. gawa ng db for workers and designation PROTO
 DONE 3. gawa ng gui pang pasok ng tasks
-4. ayusin api para kapasok data from gui to db
-5. gawa ng gui pang show ng lahat ng tasks
-6. show lahat ng tasks sa calendar
-7. gawa ng gui pangshow ng lahat ng SO
+4. gawa ng gui pangshow ng lahat ng SO
+    a. learn how factory works in dart
+    b. learn how .fromJson works
+    c. get muna data sa backend
+    d. show data in list type
+    e. create a table ui
+    f. insert data to table
+5. learn async flutter
+6. ayusin api para kapasok data from gui to db
+7. gawa ng gui pang show ng lahat ng tasks
+8. show lahat ng tasks sa calendar
+
 
 
 endpoints:
